@@ -5,10 +5,12 @@ Create new list
 {% endblock %}
 
 {% block content %}
-Create page
+Create task
 <form method="post" action="/create/">
     {% csrf_token %}
-    {{form.as_p}}
-    <button type="Submit", name="save">Create new</button>
+    <input type="text", name="newtaskhead">
+    <input type="para", name="newtaskbody">
+    <input type="date" name="deadline">
+    <button type="Submit", name="newItem", value="newItem">Add tasks</button>
 </form>
 {% endblock %}

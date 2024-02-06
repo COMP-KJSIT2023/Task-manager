@@ -5,5 +5,20 @@ HOME
 {% endblock %}
 
 {% block content %}
-<h1>HOME PAGE</h1>
+<h1>User: {{ user.name }}</h1>
+    <h2>Tasks:</h2>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.id }} | {{ task.task_heading }} | Deasline - {{ task.deadline }}</li>
+            <li>{{task.task_details}}</li>
+            <div class="progress">
+                <div class="progress-bar" style="width: {{ task.progress }}%"></div>
+            </div>
+            <hr>
+        {% endfor %}
+        <form method="post" action="#">
+            {% csrf_token %}
+            <input type="number", placeholder = 'Enter Task id' name='id'>
+            <button type="Submit", name="add", value="add">+</button>
+        </form>
 {% endblock %}
