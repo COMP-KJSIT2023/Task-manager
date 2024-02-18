@@ -18,6 +18,11 @@ def home(response):
             task.progress = min(100, new_progress)
             task.save() 
             return redirect('/')
+        elif response.POST.get("delete"):
+            id = response.POST.get("id")
+            task = Tasks.objects.get(id=id)
+            task.delete() 
+            return redirect('/')
     return render(response, "main/home.html", {'user': user, 'tasks':tasks})
 
 def create(response):
@@ -27,4 +32,5 @@ def create(response):
         n2 = response.POST.get("newtaskbody")
         d = response.POST.get("deadline")
         user.tasks_set.create(deadline = d, task_heading = n1, task_details = n2, progress = 0.0, timestamp = timezone.now())
+        return redirect('/')
     return render(response, "main/create.html", {"user":user})
