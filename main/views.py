@@ -34,3 +34,6 @@ def create(response):
         user.tasks_set.create(deadline = d, task_heading = n1, task_details = n2, progress = 0.0, timestamp = timezone.now())
         return redirect('/')
     return render(response, "main/create.html", {"user":user})
+
+def notif(response):
+    return render(response, "main/Notif.html", {})

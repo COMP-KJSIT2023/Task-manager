@@ -1,0 +1,16 @@
+<html>
+    <head>
+        <title>{% block title %}Create account {%endblock %}</title>
+    </head>
+    
+    <body>
+        {% block content %}
+        <form method="POST" class="form-group">
+            {% csrf_token %}
+            {{form}}
+            <button type="submit" class="btn btn-success">Join</button>
+        </form> 
+        {% endblock %}
+        </div>
+    </body>
+</html>
