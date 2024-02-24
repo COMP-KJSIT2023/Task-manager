@@ -1,9 +1,18 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
     
 class Supervisor(models.Model):
     name = models.CharField(max_length=20)
     code = models.CharField(max_length=7, unique=True)
+    def __str__(self):
+        return self.name
+    
+
+class Project(models.Model):
+    name = models.CharField(max_length=20)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
     def __str__(self):
         return self.name
     
@@ -13,13 +22,6 @@ class Notes(models.Model):
     timestamp = models.DateTimeField()
     def __str__(self):
         return self.note
-    
-class User(models.Model):
-    supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
-    name = models.CharField(max_length=20)
-    project_name = models.CharField(max_length=20)  
-    def __str__(self):
-        return self.name
     
 class Tasks(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

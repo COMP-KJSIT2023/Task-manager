@@ -1,12 +1,21 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse, HttpResponseRedirect
-from .models import Tasks, User
+from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse
+from .models import Tasks
+from django.contrib.auth.models import User
 from django.utils import timezone
 
+
 # Create your views here.
+@login_required
+def get_current_user_id(request: HttpRequest) -> int:
+    user_id = request.user.id
+    return user_id
+
+@login_required
 def home(response):
-    user = User.objects.get(id=1)
-    tasks = Tasks.objects.filter(user=user)
+    user_id = get_current_user_id(response)
+    tasks = Tasks.objects.filter(id=user_id)
     
     if response.method == "POST":
         print(response.POST)
@@ -23,17 +32,18 @@ def home(response):
             task = Tasks.objects.get(id=id)
             task.delete() 
             return redirect('/')
-    return render(response, "main/home.html", {'user': user, 'tasks':tasks})
+    return render(response, "main/home.html", {'user': User, 'tasks':tasks})
 
+@login_required
 def create(response):
-    user = User.objects.get(id=1)
     if response.POST.get("newItem"):
         n1 = response.POST.get("newtaskhead")
         n2 = response.POST.get("newtaskbody")
         d = response.POST.get("deadline")
-        user.tasks_set.create(deadline = d, task_heading = n1, task_details = n2, progress = 0.0, timestamp = timezone.now())
+        response.user.tasks_set.create(deadline = d, task_heading = n1, task_details = n2, progress = 0.0, timestamp = timezone.now())
         return redirect('/')
-    return render(response, "main/create.html", {"user":user})
+    return render(response, "main/create.html", {"user":User})
 
+@login_required
 def notif(response):
     return render(response, "main/Notif.html", {})
