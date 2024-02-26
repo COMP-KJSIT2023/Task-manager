@@ -24,4 +24,8 @@ def register(response):
         return redirect("/login")
     else:
         form = Registerform()
-    return render(response, "register.html", {"form":form})
+    return render(response, "registration/register.html", {"form":form})
+
+def supervisor(response):
+   
+    return render(response, "registration/supervisor.html", {})
