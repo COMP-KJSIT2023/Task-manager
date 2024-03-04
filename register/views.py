@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import Registerform
-from main.models import Supervisor, Project
+from main.models import Supervisor
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.forms import UserCreationForm
 import string, random
@@ -27,5 +27,15 @@ def register(response):
     return render(response, "registration/register.html", {"form":form})
 
 def supervisor(response):
-   
-    return render(response, "registration/supervisor.html", {})
+    if response.method == "POST":
+        form = Registerform(response.POST)
+        name = response.POST.get("Supervisor")
+        Supervisor.objects.create(name = name, code=generate_random_string(6).upper()) 
+        if form.is_valid():
+            user = form.save()
+            group = Group.objects.get(name='Supervisor')
+            user.groups.add(group)
+        return redirect("/login")
+    else:
+        form = Registerform()
+    return render(response, "registration/supervisor.html", {"form":form})

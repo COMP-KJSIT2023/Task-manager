@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Create account {%endblock %}
 {% block content %}
-  <h1>hello</h1>
+        <div class="form-container">
+        <form method="POST" class="form-group">
+            {% csrf_token %}
+                {{form}}
+            <div class="form-group">
+              <label for="text">Supervisor name :</label>
+              <input type="text" name="Supervisor" placeholder="Enter name">
+            </div>
+            <button type="submit" class="form-submit-btn">Join</button>
+        </form>
+        </div> 
 {% endblock %}
