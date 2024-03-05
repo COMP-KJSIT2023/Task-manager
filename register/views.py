@@ -1,14 +1,19 @@
 from django.shortcuts import render, redirect
-from .forms import Registerform
+from .forms import Registerform, LoginForm
 from main.models import Supervisor
 from django.contrib.auth.models import Group, User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
 import string, random
 
 def generate_random_string(length):
     characters = string.ascii_letters + string.digits
     random_string = ''.join(random.choice(characters) for i in range(length))
     return random_string
+
+def has_permission(user):
+    user = User.objects.get(username=user)
+    return  user.groups.filter(name='Supervisor').exists()
 
 def register(response):
     if response.method == "POST":
@@ -28,10 +33,10 @@ def register(response):
 
 def supervisor(response):
     if response.method == "POST":
-        form = Registerform(response.POST)
-        name = response.POST.get("Supervisor")
-        Supervisor.objects.create(name = name, code=generate_random_string(6).upper()) 
+        form = Registerform(response.POST) 
         if form.is_valid():
+            name = response.POST.get("Supervisor")
+            Supervisor.objects.create(name = name, code=generate_random_string(6).upper())
             user = form.save()
             group = Group.objects.get(name='Supervisor')
             user.groups.add(group)
@@ -39,3 +44,22 @@ def supervisor(response):
     else:
         form = Registerform()
     return render(response, "registration/supervisor.html", {"form":form})
+
+def login(response):
+    if response.method == "POST":
+        form = LoginForm(response.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(response, username=username, password=password)
+            if user is not None:
+                auth_login(response, user)
+                if has_permission(user):
+                    return redirect('/super/')
+                else:
+                    return redirect('/')
+            else:
+                return render(response, 'registration/login.html', {'form': form})
+    else:
+        form = LoginForm()
+    return render(response, "registration/login.html", {"form":form})
