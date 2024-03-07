@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from django.urls import reverse
 from django.contrib.auth.models import User
     
 class Supervisor(models.Model):
@@ -16,8 +15,6 @@ class Project(models.Model):
     supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
     def __str__(self):
         return self.name
-    def get_absolute_url(self):
-        return reverse("index", kwargs={'pk': self.pk})
     
 class Notes(models.Model):
     supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)

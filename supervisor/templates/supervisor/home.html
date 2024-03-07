@@ -45,6 +45,7 @@ HOME
       
       .title {
         color: #fff;
+        text-decoration: none;
         font-size: 26px;
         line-height: 26px;
       }
@@ -55,11 +56,13 @@ HOME
       }
 </style>
     <div class="grid">
-        {% for project in projects %}
+      {% for project_data in projects %}
+      <a href="{{ project_data.project.id }}" class="title">
         <div class="card">
-            <span class="small-text">{{ user.username }}</span>
-            <span class="title"><a href"{{ project.get_absolute_url }}">{{ project.name }} </a></span>
+            <span class="small-text">{{ project_data.username }}</span>
+            <span class="title">{{ project_data.project.name }}</span>
         </div>
-        {% endfor %}
+      </a>
+      {% endfor %}
     </div>
 {% endblock %}
