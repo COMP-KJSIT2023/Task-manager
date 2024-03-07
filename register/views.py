@@ -35,9 +35,9 @@ def supervisor(response):
     if response.method == "POST":
         form = Registerform(response.POST) 
         if form.is_valid():
-            name = response.POST.get("Supervisor")
-            Supervisor.objects.create(name = name, code=generate_random_string(6).upper())
             user = form.save()
+            name = user.username
+            Supervisor.objects.create(name = name, code=generate_random_string(6).upper())
             group = Group.objects.get(name='Supervisor')
             user.groups.add(group)
         return redirect("/login")

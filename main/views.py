@@ -7,15 +7,11 @@ from django.utils import timezone
 
 
 # Create your views here.
-@login_required
-def get_current_user_id(request: HttpRequest) -> int:
-    user_id = request.user.id
-    return user_id
 
 @login_required
 def home(response):
-    user_id = get_current_user_id(response)
-    tasks = Tasks.objects.filter(id=user_id)
+    current_user = response.user
+    tasks = Tasks.objects.filter(user = current_user)
     
     if response.method == "POST":
         print(response.POST)

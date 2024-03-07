@@ -1,12 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-</head>
-<body>
-    <h1>Welcome to Our Website</h1>
-    <p>This is a basic example of a home page. You can customize it as needed for your project.</p>
-</body>
-</html>
+{% extends 'main/base.html' %}
+
+{% block title %}
+HOME
+{% endblock %}
+
+{% block content %}
+<style> 
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px;
+      }
+
+      .card {
+        max-width: 400px;
+        background-color: rgb(7 16 45);
+        background: linear-gradient(to top right, rgb(7 16 45), rgb(58 60 84));
+        background: -webkit-linear-gradient(to top right, rgb(7 16 45), rgb(58 60 84)); 
+        display: grid;
+        padding: 20px;
+        border-radius: 20px;
+        border: 1px solid rgb(84 90 106);
+      }
+
+      .card:hover {
+        color: #fff;
+        background-color: #1A1A1A;
+        box-shadow: rgba(0, 0, 0, 0.5) 0 10px 20px;
+        transform: translateY(-3px);
+      }
+      
+      .small-text, .title,.desc {
+        font-weight: 600;
+      }
+      
+      .title,.desc {
+        margin: 8px 0;
+      }
+      
+      .small-text {
+        color: #488aec;
+        font-size: 14px;
+      }
+      
+      .title {
+        color: #fff;
+        font-size: 26px;
+        line-height: 26px;
+      }
+      
+      .desc {
+        color: rgb(151 153 167);
+        font-size: 13px;
+      }
+</style>
+    <div class="grid">
+        {% for project in projects %}
+        <div class="card">
+            <span class="small-text">{{ user.username }}</span>
+            <span class="title"><a href"{{ project.get_absolute_url }}">{{ project.name }} </a></span>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
