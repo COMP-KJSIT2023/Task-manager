@@ -29,10 +29,9 @@ def index(response,pk):
             new_progress = current_progress + 10
             task.progress = min(100, new_progress)
             task.save() 
-            return redirect('/')
         elif response.POST.get("delete"):
             id = response.POST.get("id")
             task = Tasks.objects.get(id=id)
             task.delete() 
-            return redirect('/')
+        return redirect('index', pk)
     return render(response, "supervisor/index.html", {"tasks":tasks})
